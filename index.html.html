@@ -1,0 +1,952 @@
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sector Intelligence Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;1,300&amp;family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f6fa;--surface:#fff;--surface2:#f0f3f8;
+  --border:#e2e8f0;--border2:#c8d3e6;
+  --text:#0f172a;--muted:#64748b;--muted2:#94a3b8;
+  --accent:#2563eb;--sidebar:#1e293b;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;min-height:100vh;}
+.shell{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:234px;flex-shrink:0;background:var(--sidebar);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.logo{padding:24px 20px 18px;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer;user-select:none;}
+.logo-mark{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;color:#475569;text-transform:uppercase;margin-bottom:6px;transition:color .3s;}
+.logo:hover .logo-mark{color:#60a5fa;}
+.logo-title{font-family:'Inter',sans-serif;font-size:18px;font-weight:800;color:#fff;line-height:1.2;}
+.logo-title span{color:#60a5fa;}
+.admin-pill{display:none;margin-top:9px;background:rgba(251,191,36,.13);border:1px solid rgba(251,191,36,.28);border-radius:6px;padding:4px 10px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:#fbbf24;text-transform:uppercase;}
+.admin-pill.on{display:block;}
+.nav-section{padding:16px 20px 5px;font-size:10px;font-weight:600;letter-spacing:.16em;color:#334155;text-transform:uppercase;font-family:'DM Mono',monospace;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 20px;cursor:pointer;transition:background .15s;border-left:3px solid transparent;font-size:13px;color:#94a3b8;}
+.nav-item:hover{background:rgba(255,255,255,.05);color:#cbd5e1;}
+.nav-item.active{background:rgba(255,255,255,.07);color:#fff;font-weight:500;border-left-color:var(--sc,#60a5fa);}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--sc,#475569);flex-shrink:0;}
+.nav-item.active .nav-dot{box-shadow:0 0 6px var(--sc,#60a5fa);}
+.nav-count{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;background:rgba(255,255,255,.08);border-radius:8px;padding:1px 7px;color:#475569;}
+.nav-item.active .nav-count{background:rgba(255,255,255,.12);color:#94a3b8;}
+.nav-special{border-top:1px solid rgba(255,255,255,.07);margin-top:8px;}
+.nav-special .nav-item{color:#fbbf24;}
+.nav-special .nav-item.active{color:#fde68a;border-left-color:#fbbf24;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:#334155;border-radius:4px;}
+
+/* MAIN */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;}
+
+/* PUBLISH BANNER */
+.pub-bar{display:none;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 26px;background:#fefce8;border-bottom:2px solid #fde047;}
+.pub-bar.show{display:flex;}
+.pub-txt{flex:1;font-family:'DM Mono',monospace;font-size:11px;color:#92400e;line-height:1.5;}
+.pub-txt strong{color:#78350f;}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;gap:16px;height:60px;}
+.pg-title{display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:17px;font-weight:800;color:var(--text);}
+.pg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.topbar-right{margin-left:auto;display:flex;gap:10px;align-items:center;}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 13px;transition:border-color .15s;}
+.search-box:focus-within{border-color:var(--accent);}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;width:180px;}
+.search-box input::placeholder{color:var(--muted2);}
+.lu-badge{display:none;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted2);background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 10px;white-space:nowrap;}
+.lu-badge.show{display:flex;}
+.lu-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .15s;}
+.btn:hover{border-color:var(--accent);color:var(--accent);}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.btn-primary:hover{background:#1d4ed8;border-color:#1d4ed8;color:#fff;}
+.btn-green{background:#16a34a;border-color:#16a34a;color:#fff;font-weight:600;}
+.btn-green:hover{background:#15803d;}
+.btn-sm{padding:5px 10px;font-size:11px;}
+.btn-edit{color:#d97706;border-color:#fde68a;background:#fffbeb;}
+.btn-edit:hover{background:#fef3c7;border-color:#d97706;}
+.btn-del{color:#dc2626;border-color:#fecaca;background:#fef2f2;}
+.btn-del:hover{background:#fee2e2;border-color:#dc2626;}
+
+/* STATS */
+.stats-row{display:flex;gap:14px;padding:16px 28px;border-bottom:1px solid var(--border);background:var(--surface);}
+.stat-card{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:13px 16px;display:flex;align-items:center;gap:14px;}
+.stat-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.stat-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:2px;}
+.stat-val{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text);line-height:1;}
+.stat-val span{font-size:11px;color:var(--muted);font-family:'DM Sans',sans-serif;font-weight:400;margin-left:3px;}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;align-items:center;padding:10px 28px;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap;}
+.filter-lbl{font-size:11px;color:var(--muted2);font-family:'DM Mono',monospace;}
+.chip{padding:4px 13px;border-radius:20px;font-size:11px;font-weight:500;border:1px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;transition:all .15s;}
+.chip:hover{border-color:var(--accent);color:var(--accent);}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.chip.cma.active{background:#7c3aed;border-color:#7c3aed;}
+.chip.cres.active{background:#059669;border-color:#059669;}
+.chip.cpol.active{background:#d97706;border-color:#d97706;}
+.chip.ctr.active{background:#db2777;border-color:#db2777;}
+
+/* ENTRIES */
+.entries-wrap{flex:1;padding:20px 28px;background:var(--bg);}
+.entries{display:flex;flex-direction:column;gap:10px;}
+.ecard{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:box-shadow .2s,border-color .2s;animation:si .2s ease both;}
+.ecard:hover{border-color:var(--border2);box-shadow:0 4px 16px rgba(0,0,0,.06);}
+@keyframes si{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ecard-main{display:flex;align-items:stretch;cursor:pointer;}
+.ecard-bar{width:4px;flex-shrink:0;}
+.ecard-body{flex:1;min-width:0;padding:13px 16px;}
+.ecard-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px;}
+.tag{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 9px;border-radius:4px;font-family:'DM Mono',monospace;background:var(--bg);color:var(--muted);border:1px solid var(--border);}
+.tag.cat{background:rgba(var(--cr,100,116,139),.1);color:var(--cc,var(--muted));border-color:rgba(var(--cr,100,116,139),.2);}
+.ecard-date{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted2);flex-shrink:0;}
+.ecard-company{font-weight:700;font-size:13px;color:var(--text);margin-bottom:1px;}
+.ecard-headline{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.ecard-details{font-size:12px;color:var(--muted);line-height:1.6;}
+.ecard-source{font-size:10px;font-family:'DM Mono',monospace;color:var(--muted2);margin-top:7px;}
+.ecard-footer{display:flex;align-items:center;gap:8px;padding:8px 16px 8px 20px;border-top:1px solid var(--border);background:var(--bg);}
+
+/* EMPTY */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 20px;text-align:center;}
+.empty-icon{font-size:38px;margin-bottom:16px;opacity:.25;}
+.empty-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:5px;}
+.empty-sub{font-size:13px;color:var(--muted);}
+
+/* TODAY / ARCHIVE */
+.tw-wrap{padding:24px 28px;background:var(--bg);}
+.tw-title{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--text);}
+.tw-sub{font-size:13px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;margin-bottom:20px;}
+.tw-empty{padding:50px 20px;text-align:center;color:var(--muted2);font-size:13px;}
+.aw-block{margin-bottom:32px;}
+.aw-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--sidebar);border-radius:10px;margin-bottom:14px;cursor:pointer;user-select:none;transition:background .15s;}
+.aw-head:hover{background:#273347;}
+.aw-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;}
+.aw-cnt{font-family:'DM Mono',monospace;font-size:10px;background:rgba(255,255,255,.1);color:#94a3b8;border-radius:8px;padding:2px 9px;}
+.aw-chev{color:#475569;font-size:11px;transition:transform .2s;}
+.aw-chev.open{transform:rotate(180deg);}
+.aw-body{display:none;}
+.aw-body.open{display:block;}
+.aw-sec-lbl{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted);padding:8px 4px 6px;border-bottom:1px solid var(--border);margin-bottom:8px;margin-top:14px;}
+.aw-sec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+
+/* DETAIL OVERLAY */
+.overlay{position:fixed;inset:0;z-index:300;background:rgba(15,23,42,.5);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.det-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:640px;max-width:95vw;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.18);transform:scale(.96) translateY(10px);transition:transform .2s;}
+.overlay.open .det-box{transform:scale(1) translateY(0);}
+.det-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);}
+.det-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.det-title{font-family:'Inter',sans-serif;font-size:19px;font-weight:800;color:var(--text);line-height:1.3;}
+.det-co{font-size:13px;font-weight:700;color:var(--muted);margin-top:4px;}
+.det-body{padding:20px 24px;display:flex;flex-direction:column;gap:16px;}
+.det-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);font-family:'DM Mono',monospace;margin-bottom:5px;}
+.det-text{font-size:14px;color:var(--text);line-height:1.7;white-space:pre-wrap;}
+.det-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:13px;font-weight:500;text-decoration:none;border:1px solid #bfdbfe;background:#eff6ff;padding:7px 14px;border-radius:8px;transition:all .15s;word-break:break-all;}
+.det-link:hover{background:#dbeafe;border-color:var(--accent);}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.det-field{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+.det-field-lbl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-family:'DM Mono',monospace;margin-bottom:3px;}
+.det-field-val{font-size:13px;font-weight:500;color:var(--text);}
+.det-foot{padding:14px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;background:var(--bg);border-radius:0 0 16px 16px;}
+
+/* FORM MODAL */
+.modal-wrap{position:fixed;inset:0;z-index:400;background:rgba(15,23,42,.5);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.modal-wrap.open{opacity:1;pointer-events:all;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:560px;max-width:95vw;max-height:92vh;overflow-y:auto;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.15);transform:scale(.96) translateY(10px);transition:transform .2s;}
+.modal-wrap.open .modal{transform:scale(1) translateY(0);}
+.modal-title{font-family:'Inter',sans-serif;font-size:17px;font-weight:800;margin-bottom:20px;color:var(--text);}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.ff{grid-column:1/-1;}
+.fl{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;display:block;margin-bottom:5px;}
+.fi,.fs,.fta{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;width:100%;}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--accent);background:#fff;}
+.fta{resize:vertical;min-height:100px;line-height:1.5;}
+.modal-actions{display:flex;gap:10px;margin-top:22px;justify-content:flex-end;}
+
+/* PASSWORD MODAL */
+.pw-wrap{position:fixed;inset:0;z-index:500;background:rgba(15,23,42,.72);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.pw-wrap.open{opacity:1;pointer-events:all;}
+.pw-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:340px;max-width:92vw;padding:32px;box-shadow:0 24px 60px rgba(0,0,0,.22);text-align:center;transform:scale(.96) translateY(10px);transition:transform .2s;}
+.pw-wrap.open .pw-box{transform:scale(1) translateY(0);}
+.pw-ico{font-size:28px;margin-bottom:12px;}
+.pw-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.pw-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.pw-inp{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:15px;font-family:'DM Mono',monospace;letter-spacing:.2em;text-align:center;outline:none;transition:border-color .15s;color:var(--text);}
+.pw-inp:focus{border-color:var(--accent);background:#fff;}
+.pw-err{font-size:11px;color:#dc2626;margin-top:8px;min-height:16px;font-family:'DM Mono',monospace;}
+.pw-actions{display:flex;gap:8px;margin-top:16px;}
+.pw-actions .btn{flex:1;justify-content:center;}
+
+/* HOW-TO MODAL */
+.gs{border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.gs-t{font-weight:700;font-size:13px;margin-bottom:4px;}
+.gs-b{font-size:13px;line-height:1.65;color:var(--muted);}
+code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar">
+  <div class="logo" onclick="logoClick()" title="Triple-click to enter admin mode">
+    <div class="logo-mark">Market Intel</div>
+    <div class="logo-title">Sector<br><span>Tracker</span></div>
+    <div class="admin-pill on" id="adminPill">⚙ Admin — click to exit</div>
+  </div>
+  <div class="nav-special">
+    <div class="nav-item" id="navToday" onclick="showToday()">
+      <span style="font-size:14px">📅</span> This Week's Brief
+      <span class="nav-count" id="cntToday">1</span>
+    </div>
+    <div class="nav-item" id="navArchive" onclick="showArchive()">
+      <span style="font-size:14px">🗂</span> Past Weeks
+      <span class="nav-count" id="cntArchive">4</span>
+    </div>
+  </div>
+  <div class="nav-section">Sectors</div>
+  <div id="navList"><div class="nav-item active" style="--sc: #16a34a;"><span class="nav-dot"></span>Fundraise &amp; IPO<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #e11d48;"><span class="nav-dot"></span>Promoter Selling<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #2563eb;"><span class="nav-dot"></span>Banking &amp; Finance<span class="nav-count">2</span></div><div class="nav-item" style="--sc: #7c3aed;"><span class="nav-dot"></span>Information Technology<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #d97706;"><span class="nav-dot"></span>Energy &amp; Oil<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #059669;"><span class="nav-dot"></span>Pharmaceuticals<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #84cc16;"><span class="nav-dot"></span>Agriculture<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #db2777;"><span class="nav-dot"></span>FMCG &amp; Consumer<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #ea580c;"><span class="nav-dot"></span>Auto &amp; Auto Ancillary<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #475569;"><span class="nav-dot"></span>Metals &amp; Mining<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #dc2626;"><span class="nav-dot"></span>Infrastructure &amp; Real Estate<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0d9488;"><span class="nav-dot"></span>Telecom &amp; Media<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #4f46e5;"><span class="nav-dot"></span>Defence &amp; Aerospace<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0891b2;"><span class="nav-dot"></span>Chemicals<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #65a30d;"><span class="nav-dot"></span>Retail<span class="nav-count">0</span></div></div>
+</aside>
+
+<!-- ══════════ MAIN ══════════ -->
+<main class="main">
+
+  <!-- Publish banner -->
+  <div class="pub-bar show" id="pubBar">
+    <div class="pub-txt">
+      <strong>⚠ You have unsaved changes.</strong><br>
+      Click "Save &amp; Export HTML" → upload the downloaded file to GitHub → everyone sees your updates in ~30 seconds.
+    </div>
+    <button class="btn btn-green" onclick="exportHTML()">⬇ Save &amp; Export HTML</button>
+    <button class="btn" onclick="openGuide()">📋 How to upload</button>
+  </div>
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="pg-title">
+      <div class="pg-dot" id="pgDot" style="background: rgb(22, 163, 74);"></div>
+      <span id="pgTitle">Fundraise &amp; IPO</span>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box">
+        <span style="color:var(--muted2);font-size:13px">⌕</span>
+        <input type="text" id="searchInput" placeholder="Search entries…">
+      </div>
+      <div class="lu-badge show" id="luBadge">
+        <span class="lu-dot"></span><span id="luText">Updated 19 May 2025 · 09:00 am</span>
+      </div>
+      <button class="btn btn-primary" id="addBtn" style="display: inline-flex;" onclick="openAdd()">＋ Add Entry</button>
+    </div>
+  </div>
+
+  <!-- Sector view -->
+  <div id="sectorView" style="display: flex; flex-direction: column; flex: 1 1 0%;">
+    <div class="stats-row" id="statsRow">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#eff6ff">📋</div>
+      <div><div class="stat-label">Total Entries</div>
+      <div class="stat-val">1<span>items</span></div></div>
+    </div></div>
+    <div class="filters">
+      <span class="filter-lbl">Filter:</span>
+      <span class="chip active" data-f="all" onclick="setF('all')">All</span>
+      <span class="chip" data-f="Latest News" onclick="setF('Latest News')">News</span>
+      <span class="chip cma" data-f="M&amp;A" onclick="setF('M&amp;A')">M&amp;A</span>
+      <span class="chip cres" data-f="Results" onclick="setF('Results')">Results</span>
+      <span class="chip ctr" data-f="Trade Deal" onclick="setF('Trade Deal')">Trade Deal</span>
+      <span class="chip cpol" data-f="Policy" onclick="setF('Policy')">Policy</span>
+    </div>
+    <div class="entries-wrap"><div class="entries" id="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1781502169193,'fundraise')">
+      <div class="ecard-bar" style="background:#16a34a"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#16a34a;--cr:22,163,74">Fundraise</span>
+          <span class="ecard-date">2026-06-15</span>
+        </div>
+        <div class="ecard-company">XYZ Ltd</div>
+        <div class="ecard-headline">XYZ Ltd raised 250m from ABC Ltd</div>
+        <div class="ecard-details">Refer to link for details</div>
+        <div class="ecard-source">📰 VC Circle · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1781502169193,'fundraise')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1781502169193,'fundraise')">✕ Delete</button>
+  </div></div></div></div>
+  </div>
+
+  <!-- Today view -->
+  <div id="todayView" style="display: none; flex: 1 1 0%; overflow-y: auto;">
+    <div class="filters" id="wkFilters">
+      <span class="filter-lbl">Filter:</span>
+      <span class="chip active" onclick="setWF('all',this)">All</span>
+      <span class="chip" onclick="setWF('Latest News',this)">News</span>
+      <span class="chip cma" onclick="setWF('M&amp;A',this)">M&amp;A</span>
+      <span class="chip cres" onclick="setWF('Results',this)">Results</span>
+      <span class="chip ctr" onclick="setWF('Trade Deal',this)">Trade Deal</span>
+      <span class="chip cpol" onclick="setWF('Policy',this)">Policy</span>
+    </div>
+    <div class="tw-wrap">
+      <div class="tw-title">📅 This Week's Brief</div>
+      <div class="tw-sub" id="wkRange">Week of 15 Jun 2026 — 21 Jun 2026</div>
+      <div id="todayContent"><div class="tw-empty">
+      <div style="font-size:32px;opacity:.22;margin-bottom:12px">📅</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Nothing logged this week yet</div>
+      <div>Check back soon.</div></div></div>
+    </div>
+  </div>
+
+  <!-- Archive view -->
+  <div id="archiveView" style="display: none; flex: 1 1 0%; flex-direction: column;">
+    <div class="filters" id="awFilters" style="background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;flex-wrap:wrap;">
+      <span class="filter-lbl">Filter:</span>
+      <span class="chip active" onclick="setAF('all',this)">All</span>
+      <span class="chip" onclick="setAF('Latest News',this)">News</span>
+      <span class="chip cma" onclick="setAF('M&amp;A',this)">M&amp;A</span>
+      <span class="chip cres" onclick="setAF('Results',this)">Results</span>
+      <span class="chip ctr" onclick="setAF('Trade Deal',this)">Trade Deal</span>
+      <span class="chip cpol" onclick="setAF('Policy',this)">Policy</span>
+    </div>
+    <div style="flex:1;overflow-y:auto;"><div class="tw-wrap"><div id="archiveContent"><div class="aw-block">
+      <div class="aw-head" onclick="togAW('ab0','ac0')">
+        <div class="aw-title">🗓 Week of 18 May 2025 — 24 May 2025</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="aw-cnt">4 entries</span>
+          <span class="aw-chev open" id="ac0">▼</span>
+        </div>
+      </div>
+      <div class="aw-body open" id="ab0"><div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:#2563eb"></span>Banking &amp; Finance
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(2)</span></div>
+        <div class="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(2,'bank')">
+      <div class="ecard-bar" style="background:#d97706"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#d97706;--cr:217,119,6">Policy</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">RBI</div>
+        <div class="ecard-headline">RBI holds repo rate at 6.25%; shifts stance to accommodative</div>
+        <div class="ecard-details">MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August poli…</div>
+        <div class="ecard-source">📰 RBI Press Release</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(2,'bank')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(2,'bank')">✕ Delete</button>
+  </div></div><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1,'bank')">
+      <div class="ecard-bar" style="background:#059669"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#059669;--cr:5,150,105">Results</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">HDFC Bank</div>
+        <div class="ecard-headline">HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr</div>
+        <div class="ecard-details">Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.</div>
+        <div class="ecard-source">📰 BSE Filing</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1,'bank')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1,'bank')">✕ Delete</button>
+  </div></div></div><div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:#7c3aed"></span>Information Technology
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(1)</span></div>
+        <div class="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(3,'it')">
+      <div class="ecard-bar" style="background:#7c3aed"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#7c3aed;--cr:124,58,237">M&amp;A</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">Infosys</div>
+        <div class="ecard-headline">Infosys acquires US-based AI firm IntelliSense for $320mn</div>
+        <div class="ecard-details">Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.</div>
+        <div class="ecard-source">📰 Bloomberg · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(3,'it')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(3,'it')">✕ Delete</button>
+  </div></div></div><div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:#059669"></span>Pharmaceuticals
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(1)</span></div>
+        <div class="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(4,'pharma')">
+      <div class="ecard-bar" style="background:#2563eb"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#2563eb;--cr:37,99,235">Latest News</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">Sun Pharma</div>
+        <div class="ecard-headline">USFDA issues EIR for Halol plant — resolution after 4 years</div>
+        <div class="ecard-details">Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US gen…</div>
+        <div class="ecard-source">📰 ET Markets</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(4,'pharma')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(4,'pharma')">✕ Delete</button>
+  </div></div></div></div>
+    </div></div></div></div>
+  </div>
+
+</main>
+</div>
+
+<!-- ══════════ DETAIL OVERLAY ══════════ -->
+<div class="overlay" id="detOverlay" onclick="closeDtlBg(event)">
+  <div class="det-box">
+    <div class="det-head">
+      <div class="det-meta" id="dtlMeta"></div>
+      <div class="det-title" id="dtlTitle"></div>
+      <div class="det-co" id="dtlCo"></div>
+    </div>
+    <div class="det-body" id="dtlBody"></div>
+    <div class="det-foot" id="dtlFoot"></div>
+  </div>
+</div>
+
+<!-- ══════════ ADD / EDIT FORM ══════════ -->
+<div class="modal-wrap" id="formWrap" onclick="closeFormBg(event)">
+  <div class="modal">
+    <div class="modal-title" id="formTitle">＋ Add Entry</div>
+    <div class="fg">
+      <div><label class="fl">Date</label><input class="fi" type="date" id="fDate"></div>
+      <div><label class="fl">Sector</label><select class="fs" id="fSector"><option value="fundraise">Fundraise &amp; IPO</option><option value="promoter">Promoter Selling</option><option value="bank">Banking &amp; Finance</option><option value="it">Information Technology</option><option value="energy">Energy &amp; Oil</option><option value="pharma">Pharmaceuticals</option><option value="agri">Agriculture</option><option value="fmcg">FMCG &amp; Consumer</option><option value="auto">Auto &amp; Auto Ancillary</option><option value="metal">Metals &amp; Mining</option><option value="infra">Infrastructure &amp; Real Estate</option><option value="telecom">Telecom &amp; Media</option><option value="defence">Defence &amp; Aerospace</option><option value="chemicals">Chemicals</option><option value="retail">Retail</option></select></div>
+      <div><label class="fl">Company / Entity</label><input class="fi" type="text" id="fCo" placeholder="e.g. HDFC Bank"></div>
+      <div>
+        <label class="fl">Category</label>
+        <select class="fs" id="fCat">
+          <option>Latest News</option><option>M&amp;A</option><option>Results</option>
+          <option>Trade Deal</option><option>Policy</option><option>Management Change</option>
+          <option>Fundraise</option><option>IPO</option><option>Promoter Selling</option>
+          <option>Analyst Rating</option><option>Macro / Global</option><option>Other</option>
+        </select>
+      </div>
+      <div class="ff"><label class="fl">Headline <span style="color:#dc2626">*</span></label><input class="fi" type="text" id="fHead" placeholder="One-line summary of the news"></div>
+      <div class="ff"><label class="fl">Details</label><textarea class="fta" id="fDet" placeholder="Full context, numbers, key implications…"></textarea></div>
+      <div><label class="fl">Source</label><input class="fi" type="text" id="fSrc" placeholder="ET, Bloomberg, BSE Filing…"></div>
+      <div><label class="fl">Source Link (optional)</label><input class="fi" type="url" id="fLink" placeholder="https://…"></div>
+      <div><label class="fl">Market Cap (₹ Cr)</label><input class="fi" type="text" id="fMcap" placeholder="e.g. 45,000"></div>
+      <div><label class="fl">City</label><input class="fi" type="text" id="fCity" placeholder="e.g. Mumbai"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeForm()">Cancel</button>
+      <button class="btn btn-primary" id="saveBtn" onclick="saveEntry()">Save Entry</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ PASSWORD MODAL ══════════ -->
+<div class="pw-wrap" id="pwWrap">
+  <div class="pw-box">
+    <div class="pw-ico">🔐</div>
+    <div class="pw-title">Admin Access</div>
+    <div class="pw-sub">Enter the password to add, edit and delete entries</div>
+    <input class="pw-inp" type="password" id="pwInp" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
+    <div class="pw-err" id="pwErr"></div>
+    <div class="pw-actions">
+      <button class="btn" onclick="closePw()">Cancel</button>
+      <button class="btn btn-primary" onclick="checkPw()">Unlock →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ HOW-TO GUIDE ══════════ -->
+<div class="modal-wrap" id="guideWrap" onclick="if(event.target===this)this.classList.remove('open')" style="z-index:600;">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-title">📋 How to publish your updates</div>
+    <div class="gs" style="background:#f0fdf4;border:1px solid #bbf7d0;">
+      <div class="gs-t" style="color:#15803d;">Step 1 — Save &amp; Export</div>
+      <div class="gs-b">Click <strong>⬇ Save &amp; Export HTML</strong> in the yellow bar. A file called <code>SectorTracker.html</code> downloads to your computer — this contains all your new entries baked in.</div>
+    </div>
+    <div class="gs" style="background:#eff6ff;border:1px solid #bfdbfe;">
+      <div class="gs-t" style="color:#1d4ed8;">Step 2 — Open GitHub</div>
+      <div class="gs-b">Go to <strong>github.com</strong> → open your <code>sector-tracker</code> repository.</div>
+    </div>
+    <div class="gs" style="background:#fdf4ff;border:1px solid #e9d5ff;">
+      <div class="gs-t" style="color:#7e22ce;">Step 3 — Upload the new file</div>
+      <div class="gs-b">Click <strong>Add file → Upload files</strong> → drag your <code>SectorTracker.html</code> in → rename it <code>index.html</code> if GitHub asks → click <strong>Commit changes</strong>.</div>
+    </div>
+    <div class="gs" style="background:#fefce8;border:1px solid #fde047;">
+      <div class="gs-t" style="color:#a16207;">Step 4 — Live in ~30 seconds ✅</div>
+      <div class="gs-b">Netlify detects the new file and republishes automatically. Everyone who refreshes the link sees your new entries.</div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-primary" onclick="document.getElementById('guideWrap').classList.remove('open')">Got it</button></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  CHANGE YOUR ADMIN PASSWORD HERE ↓
+// ═══════════════════════════════════════════════════════════════
+const ADMIN_PW = 'tracker2025';
+
+// ═══════════════════════════════════════════════════════════════
+//  ALL TRACKER DATA LIVES HERE — DO NOT EDIT BELOW THIS LINE
+//  (entries are managed through the admin panel)
+// ═══════════════════════════════════════════════════════════════
+const TRACKER_META = {"lastUpdated":"2026-06-15T11:13:00+05:30","updatedBy":"Admin"};
+const TRACKER_DATA = {"fundraise":[{"id":1781502169193,"date":"2026-06-15","company":"XYZ Ltd","cat":"Fundraise","headline":"XYZ Ltd raised 250m from ABC Ltd","details":"Refer to link for details","source":"VC Circle","link":"https://www.vccircle.com/aicall-assistant-startup-equal-raises-series-b-funding","marketCap":"9000","city":"Mumbai"}],"promoter":[],"bank":[{"id":1,"date":"2025-05-19","company":"HDFC Bank","cat":"Results","headline":"HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr","details":"Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.","source":"BSE Filing","link":"","marketCap":"","city":"Mumbai"},{"id":2,"date":"2025-05-19","company":"RBI","cat":"Policy","headline":"RBI holds repo rate at 6.25%; shifts stance to accommodative","details":"MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August policy.","source":"RBI Press Release","link":"","marketCap":"","city":"Mumbai"}],"it":[{"id":3,"date":"2025-05-19","company":"Infosys","cat":"M&A","headline":"Infosys acquires US-based AI firm IntelliSense for $320mn","details":"Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.","source":"Bloomberg","link":"https://bloomberg.com","marketCap":"","city":"Bengaluru"}],"energy":[],"pharma":[{"id":4,"date":"2025-05-19","company":"Sun Pharma","cat":"Latest News","headline":"USFDA issues EIR for Halol plant — resolution after 4 years","details":"Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US generics revenue.","source":"ET Markets","link":"","marketCap":"","city":"Mumbai"}],"agri":[],"fmcg":[],"auto":[],"metal":[],"infra":[],"telecom":[],"defence":[],"chemicals":[],"retail":[]};
+// ═══════════════════════════════════════════════════════════════
+
+const TODAY = new Date().toISOString().split('T')[0];
+
+const SECTORS = [
+  {id:'fundraise',name:'Fundraise & IPO',              color:'#16a34a'},
+  {id:'promoter', name:'Promoter Selling',             color:'#e11d48'},
+  {id:'bank',     name:'Banking & Finance',            color:'#2563eb'},
+  {id:'it',       name:'Information Technology',       color:'#7c3aed'},
+  {id:'energy',   name:'Energy & Oil',                 color:'#d97706'},
+  {id:'pharma',   name:'Pharmaceuticals',              color:'#059669'},
+  {id:'agri',     name:'Agriculture',                  color:'#84cc16'},
+  {id:'fmcg',     name:'FMCG & Consumer',              color:'#db2777'},
+  {id:'auto',     name:'Auto & Auto Ancillary',        color:'#ea580c'},
+  {id:'metal',    name:'Metals & Mining',              color:'#475569'},
+  {id:'infra',    name:'Infrastructure & Real Estate', color:'#dc2626'},
+  {id:'telecom',  name:'Telecom & Media',              color:'#0d9488'},
+  {id:'defence',  name:'Defence & Aerospace',          color:'#4f46e5'},
+  {id:'chemicals',name:'Chemicals',                    color:'#0891b2'},
+  {id:'retail',   name:'Retail',                       color:'#65a30d'},
+];
+
+const CAT_COLOR = {
+  'Latest News':       ['#2563eb','37,99,235'],
+  'M&A':               ['#7c3aed','124,58,237'],
+  'Results':           ['#059669','5,150,105'],
+  'Trade Deal':        ['#db2777','219,39,119'],
+  'Policy':            ['#d97706','217,119,6'],
+  'Management Change': ['#ea580c','234,88,12'],
+  'Fundraise':         ['#16a34a','22,163,74'],
+  'IPO':               ['#0d9488','13,148,136'],
+  'Promoter Selling':  ['#e11d48','225,29,72'],
+  'Analyst Rating':    ['#4f46e5','79,70,229'],
+  'Macro / Global':    ['#64748b','100,116,139'],
+  'Other':             ['#94a3b8','148,163,184'],
+};
+
+// ─── STATE ────────────────────────────────────────────────────
+let data         = JSON.parse(JSON.stringify(TRACKER_DATA)); // deep copy
+let isAdmin      = false;
+let dirty        = false;
+let activeSector = 'bank';
+let activeF      = 'all';
+let weekF        = 'all';
+let archiveF     = 'all';
+let editId       = null;
+let editSid      = null;
+let view         = 'today';
+let logoClicks   = 0, logoTimer = null;
+
+// ─── INIT ─────────────────────────────────────────────────────
+function init() {
+  SECTORS.forEach(s => { if (!data[s.id]) data[s.id] = []; });
+
+  // Show "last updated" badge
+  if (TRACKER_META.lastUpdated) {
+    const d = new Date(TRACKER_META.lastUpdated);
+    document.getElementById('luText').textContent =
+      'Updated ' + d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})
+      + ' · ' + d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+    document.getElementById('luBadge').classList.add('show');
+  }
+
+  // Populate sector dropdown in form
+  document.getElementById('fSector').innerHTML =
+    SECTORS.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+
+  showToday();
+}
+
+// ─── ADMIN ────────────────────────────────────────────────────
+function logoClick() {
+  if (isAdmin) { if (confirm('Exit admin mode?')) setAdmin(false); return; }
+  logoClicks++;
+  clearTimeout(logoTimer);
+  logoTimer = setTimeout(() => logoClicks=0, 2000);
+  if (logoClicks >= 3) { logoClicks=0; openPw(); }
+}
+function openPw() {
+  document.getElementById('pwInp').value='';
+  document.getElementById('pwErr').textContent='';
+  document.getElementById('pwWrap').classList.add('open');
+  setTimeout(()=>document.getElementById('pwInp').focus(),100);
+}
+function closePw() { document.getElementById('pwWrap').classList.remove('open'); }
+function checkPw() {
+  if (document.getElementById('pwInp').value === ADMIN_PW) {
+    closePw(); setAdmin(true);
+  } else {
+    document.getElementById('pwErr').textContent = 'Incorrect password. Try again.';
+    document.getElementById('pwInp').value='';
+    document.getElementById('pwInp').focus();
+  }
+}
+function setAdmin(on) {
+  isAdmin = on;
+  document.getElementById('adminPill').classList.toggle('on', on);
+  document.getElementById('addBtn').style.display = on ? 'inline-flex' : 'none';
+  if (!on) { dirty=false; document.getElementById('pubBar').classList.remove('show'); }
+  render();
+}
+function markDirty() {
+  dirty=true;
+  document.getElementById('pubBar').classList.add('show');
+}
+function openGuide() { document.getElementById('guideWrap').classList.add('open'); }
+
+// ─── EXPORT (bake data back into this HTML and download) ───────
+function exportHTML() {
+  const now = new Date();
+  const pad = n=>String(n).padStart(2,'0');
+  const ts  = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}:00+05:30`;
+
+  // Grab the full HTML source of this page
+  let html = document.documentElement.outerHTML;
+
+  // Replace TRACKER_META line with updated timestamp
+  html = html.replace(
+    /const TRACKER_META = \{.*?\};/,
+    `const TRACKER_META = ${JSON.stringify({lastUpdated:ts,updatedBy:'Admin'})};`
+  );
+
+  // Replace TRACKER_DATA line with current in-memory data
+  html = html.replace(
+    /const TRACKER_DATA = \{[\s\S]*?\};(\s*\/\/ ═)/,
+    `const TRACKER_DATA = ${JSON.stringify(data)};$1`
+  );
+
+  const blob = new Blob([html], {type:'text/html'});
+  const a = Object.assign(document.createElement('a'), {
+    href: URL.createObjectURL(blob),
+    download: 'SectorTracker.html'
+  });
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+
+  // Update badge
+  document.getElementById('luText').textContent =
+    'Updated ' + now.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})
+    + ' · ' + now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('luBadge').classList.add('show');
+
+  dirty=false;
+  document.getElementById('pubBar').classList.remove('show');
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────
+const isUrl = s => s && (s.startsWith('http://') || s.startsWith('https://'));
+function weekRange() {
+  const now=new Date(), day=now.getDay();
+  const mon=new Date(now); mon.setDate(now.getDate()+(day===0?-6:1-day)); mon.setHours(0,0,0,0);
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6); sun.setHours(23,59,59,999);
+  return {mon,sun};
+}
+const inThisWeek = ds => { const d=new Date(ds),{mon,sun}=weekRange(); return d>=mon&&d<=sun; };
+
+// ─── NAV ─────────────────────────────────────────────────────
+function buildNav() {
+  const nl = document.getElementById('navList');
+  nl.innerHTML='';
+  SECTORS.forEach(s=>{
+    const el=document.createElement('div');
+    el.className='nav-item'+(view==='sector'&&s.id===activeSector?' active':'');
+    el.style.setProperty('--sc',s.color);
+    el.innerHTML=`<span class="nav-dot"></span>${s.name}<span class="nav-count">${(data[s.id]||[]).length}</span>`;
+    el.onclick=()=>{activeSector=s.id;activeF='all';showSector();};
+    nl.appendChild(el);
+  });
+  document.getElementById('navToday').className   = 'nav-item'+(view==='today'  ?' active':'');
+  document.getElementById('navArchive').className  = 'nav-item'+(view==='archive'?' active':'');
+  let tw=0; SECTORS.forEach(s=>(data[s.id]||[]).forEach(e=>{if(inThisWeek(e.date))tw++;}));
+  document.getElementById('cntToday').textContent = tw;
+  document.getElementById('cntArchive').textContent = pastWeeks().reduce((a,w)=>a+wkCount(w.sectors),0);
+}
+
+// ─── CARD HTML ───────────────────────────────────────────────
+function cardHtml(e, sid) {
+  const [cc,cr]=CAT_COLOR[e.cat]||['#94a3b8','148,163,184'];
+  const s=sid||activeSector, eid=JSON.stringify(e.id);
+  const foot=isAdmin?`<div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(${eid},'${s}')">✏ Edit</button>
+    <button class="btn btn-sm btn-del"  onclick="event.stopPropagation();delEntry(${eid},'${s}')">✕ Delete</button>
+  </div>`:'';
+  return `<div class="ecard">
+    <div class="ecard-main" onclick="openDetail(${eid},'${s}')">
+      <div class="ecard-bar" style="background:${cc}"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:${cc};--cr:${cr}">${e.cat}</span>
+          <span class="ecard-date">${e.date}</span>
+        </div>
+        ${e.company?`<div class="ecard-company">${e.company}</div>`:''}
+        <div class="ecard-headline">${e.headline||'—'}</div>
+        ${e.details?`<div class="ecard-details">${e.details.length>140?e.details.slice(0,140)+'…':e.details}</div>`:''}
+        ${e.source?`<div class="ecard-source">📰 ${e.source}${isUrl(e.link)?' · 🔗 Link':''}</div>`:''}
+      </div>
+    </div>${foot}</div>`;
+}
+
+// ─── SECTOR VIEW ─────────────────────────────────────────────
+function buildSector() {
+  const sec=SECTORS.find(s=>s.id===activeSector);
+  document.getElementById('pgTitle').textContent=sec.name;
+  document.getElementById('pgDot').style.background=sec.color;
+  document.getElementById('statsRow').innerHTML=`
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#eff6ff">📋</div>
+      <div><div class="stat-label">Total Entries</div>
+      <div class="stat-val">${(data[activeSector]||[]).length}<span>items</span></div></div>
+    </div>`;
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const rows=(data[activeSector]||[]).filter(e=>{
+    const t=[e.company,e.headline,e.details,e.source].join(' ').toLowerCase();
+    return(!q||t.includes(q))&&(activeF==='all'||e.cat===activeF);
+  }).slice().reverse();
+  const c=document.getElementById('entries');
+  c.innerHTML=rows.length?rows.map(e=>cardHtml(e)).join('')
+    :`<div class="empty"><div class="empty-icon">◈</div>
+      <div class="empty-title">No entries yet</div>
+      <div class="empty-sub">${isAdmin?'Click "+ Add Entry" above to log the first item.':'Nothing here yet — check back soon.'}</div></div>`;
+}
+
+// ─── TODAY VIEW ───────────────────────────────────────────────
+function buildToday() {
+  const {mon,sun}=weekRange(), fmt={day:'numeric',month:'short',year:'numeric'};
+  document.getElementById('wkRange').textContent=
+    `Week of ${mon.toLocaleDateString('en-IN',fmt)} — ${sun.toLocaleDateString('en-IN',fmt)}`;
+  let rows=[];
+  SECTORS.forEach(s=>(data[s.id]||[]).filter(e=>inThisWeek(e.date)&&(weekF==='all'||e.cat===weekF))
+    .forEach(e=>rows.push({...e,_sid:s.id})));
+  rows.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+  if(!rows.length){
+    document.getElementById('todayContent').innerHTML=`<div class="tw-empty">
+      <div style="font-size:32px;opacity:.22;margin-bottom:12px">📅</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Nothing logged this week yet</div>
+      <div>Check back soon.</div></div>`;
+    return;
+  }
+  let html='',cur=null;
+  rows.forEach(e=>{
+    if(e.date!==cur){
+      cur=e.date;
+      const dl=new Date(e.date+'T00:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'short',year:'numeric'});
+      html+=`<div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;">${dl}</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div></div>`;
+    }
+    html+=cardHtml(e,e._sid);
+  });
+  document.getElementById('todayContent').innerHTML=html;
+}
+
+// ─── DETAIL ───────────────────────────────────────────────────
+function openDetail(id,sid){
+  const e=(data[sid]||[]).find(x=>x.id==id); if(!e)return;
+  const [cc,cr]=CAT_COLOR[e.cat]||['#94a3b8','148,163,184'];
+  document.getElementById('dtlMeta').innerHTML=`<span class="tag cat" style="--cc:${cc};--cr:${cr}">${e.cat}</span>`;
+  document.getElementById('dtlTitle').textContent=e.headline||'—';
+  document.getElementById('dtlCo').textContent=[e.company,e.date].filter(Boolean).join(' · ');
+  let b='';
+  if(e.details)b+=`<div><div class="det-lbl">Details</div><div class="det-text">${e.details}</div></div>`;
+  if(isUrl(e.link))b+=`<div><div class="det-lbl">Source Link</div><a class="det-link" href="${e.link}" target="_blank" rel="noopener">🔗 Open Article / Source</a></div>`;
+  b+=`<div class="det-grid">
+    ${e.source?`<div class="det-field"><div class="det-field-lbl">Source</div><div class="det-field-val">📰 ${e.source}</div></div>`:''}
+    ${e.marketCap?`<div class="det-field"><div class="det-field-lbl">Market Cap</div><div class="det-field-val">₹ ${e.marketCap} Cr</div></div>`:''}
+    ${e.city?`<div class="det-field"><div class="det-field-lbl">City</div><div class="det-field-val">📍 ${e.city}</div></div>`:''}
+    <div class="det-field"><div class="det-field-lbl">Sector</div><div class="det-field-val">${SECTORS.find(s=>s.id===sid)?.name||sid}</div></div>
+    <div class="det-field"><div class="det-field-lbl">Date</div><div class="det-field-val">${e.date}</div></div>
+  </div>`;
+  document.getElementById('dtlBody').innerHTML=b;
+  const eid=JSON.stringify(id);
+  document.getElementById('dtlFoot').innerHTML=
+    (isAdmin?`<button class="btn btn-sm btn-edit" onclick="closeDetail();openEdit(${eid},'${sid}')">✏ Edit</button>
+              <button class="btn btn-sm btn-del"  onclick="delEntry(${eid},'${sid}')">✕ Delete</button>`:'')
+    +`<button class="btn btn-sm btn-primary" onclick="closeDetail()">Close</button>`;
+  document.getElementById('detOverlay').classList.add('open');
+}
+function closeDetail(){document.getElementById('detOverlay').classList.remove('open');}
+function closeDtlBg(e){if(e.target===document.getElementById('detOverlay'))closeDetail();}
+
+// ─── FORM ─────────────────────────────────────────────────────
+function openAdd(){
+  editId=null; editSid=activeSector;
+  document.getElementById('formTitle').textContent='＋ Add Entry';
+  document.getElementById('saveBtn').textContent='Save Entry';
+  document.getElementById('fDate').value=TODAY;
+  document.getElementById('fSector').value=activeSector;
+  ['fCo','fHead','fDet','fSrc','fLink','fMcap','fCity'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fCat').value='Latest News';
+  document.getElementById('formWrap').classList.add('open');
+  setTimeout(()=>document.getElementById('fCo').focus(),100);
+}
+function openEdit(id,sid){
+  const e=(data[sid]||[]).find(x=>x.id==id); if(!e)return;
+  editId=id; editSid=sid;
+  document.getElementById('formTitle').textContent='✏ Edit Entry';
+  document.getElementById('saveBtn').textContent='Update Entry';
+  document.getElementById('fDate').value=e.date;
+  document.getElementById('fSector').value=sid;
+  document.getElementById('fCo').value=e.company||'';
+  document.getElementById('fCat').value=e.cat;
+  document.getElementById('fHead').value=e.headline||'';
+  document.getElementById('fDet').value=e.details||'';
+  document.getElementById('fSrc').value=e.source||'';
+  document.getElementById('fLink').value=e.link||'';
+  document.getElementById('fMcap').value=e.marketCap||'';
+  document.getElementById('fCity').value=e.city||'';
+  document.getElementById('formWrap').classList.add('open');
+}
+function closeForm(){document.getElementById('formWrap').classList.remove('open');editId=null;}
+function closeFormBg(e){if(e.target===document.getElementById('formWrap'))closeForm();}
+
+function saveEntry(){
+  const headline=document.getElementById('fHead').value.trim();
+  if(!headline){alert('Please enter a headline.');return;}
+  const newSid=document.getElementById('fSector').value;
+  const entry={
+    id:editId||Date.now(),
+    date:document.getElementById('fDate').value,
+    company:document.getElementById('fCo').value.trim(),
+    cat:document.getElementById('fCat').value,
+    headline,
+    details:document.getElementById('fDet').value.trim(),
+    source:document.getElementById('fSrc').value.trim(),
+    link:document.getElementById('fLink').value.trim(),
+    marketCap:document.getElementById('fMcap').value.trim(),
+    city:document.getElementById('fCity').value.trim(),
+  };
+  if(!data[newSid])data[newSid]=[];
+  if(editId){
+    if(newSid!==editSid){data[editSid]=(data[editSid]||[]).filter(e=>e.id!=editId);data[newSid].push(entry);}
+    else{data[newSid]=data[newSid].map(e=>e.id==editId?entry:e);}
+  }else{data[newSid].push(entry);}
+  activeSector=newSid;
+  closeForm(); markDirty(); render();
+}
+
+function delEntry(id,sid){
+  if(!confirm('Delete this entry?'))return;
+  data[sid]=(data[sid]||[]).filter(e=>e.id!=id);
+  closeDetail(); markDirty(); render();
+}
+
+// ─── FILTERS ─────────────────────────────────────────────────
+function setF(f){
+  activeF=f;
+  document.querySelectorAll('.chip[data-f]').forEach(c=>c.classList.toggle('active',c.dataset.f===f));
+  buildSector();
+}
+function setWF(f,el){weekF=f;document.querySelectorAll('#wkFilters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');buildToday();}
+function setAF(f,el){archiveF=f;document.querySelectorAll('#awFilters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');buildArchive();}
+document.getElementById('searchInput').addEventListener('input',()=>{if(view==='sector')buildSector();});
+
+// ─── ARCHIVE ─────────────────────────────────────────────────
+function wkKey(ds){
+  const d=new Date(ds),day=d.getDay(),m=new Date(d);
+  m.setDate(d.getDate()+(day===0?-6:1-day));m.setHours(0,0,0,0);
+  return m.toISOString().split('T')[0];
+}
+function wkLabel(ms){
+  const m=new Date(ms),s=new Date(m);s.setDate(m.getDate()+6);
+  const f={day:'numeric',month:'short',year:'numeric'};
+  return`${m.toLocaleDateString('en-IN',f)} — ${s.toLocaleDateString('en-IN',f)}`;
+}
+function pastWeeks(){
+  const{mon}=weekRange(),tms=mon.toISOString().split('T')[0],wks={};
+  SECTORS.forEach(s=>(data[s.id]||[]).forEach(e=>{
+    const wk=wkKey(e.date);if(wk>=tms)return;
+    if(!wks[wk])wks[wk]={};if(!wks[wk][s.id])wks[wk][s.id]=[];
+    wks[wk][s.id].push(e);
+  }));
+  return Object.keys(wks).sort().reverse().map(wk=>({wk,sectors:wks[wk]}));
+}
+const wkCount=secs=>Object.values(secs).reduce((a,arr)=>a+arr.length,0);
+
+function buildArchive(){
+  const wks=pastWeeks();
+  document.getElementById('cntArchive').textContent=wks.reduce((a,w)=>a+wkCount(w.sectors),0);
+  if(!wks.length){
+    document.getElementById('archiveContent').innerHTML=`<div class="tw-empty">
+      <div style="font-size:32px;opacity:.22;margin-bottom:12px">🗂</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">No past weeks yet</div>
+      <div>Entries from previous weeks appear here automatically.</div></div>`;
+    return;
+  }
+  let html='';
+  wks.forEach(({wk,sectors},wi)=>{
+    let sh='',fc=0;
+    SECTORS.forEach(s=>{
+      const rows=(sectors[s.id]||[]).filter(e=>archiveF==='all'||e.cat===archiveF).slice().reverse();
+      if(!rows.length)return;fc+=rows.length;
+      sh+=`<div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:${s.color}"></span>${s.name}
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(${rows.length})</span></div>
+        <div class="entries">${rows.map(e=>cardHtml(e,s.id)).join('')}</div>`;
+    });
+    if(archiveF!=='all'&&fc===0)return;
+    html+=`<div class="aw-block">
+      <div class="aw-head" onclick="togAW('ab${wi}','ac${wi}')">
+        <div class="aw-title">🗓 Week of ${wkLabel(wk)}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="aw-cnt">${fc} entr${fc===1?'y':'ies'}</span>
+          <span class="aw-chev" id="ac${wi}">▼</span>
+        </div>
+      </div>
+      <div class="aw-body" id="ab${wi}">${sh}</div>
+    </div>`;
+  });
+  document.getElementById('archiveContent').innerHTML=html||`<div class="tw-empty">No entries match the filter.</div>`;
+  const fb=document.getElementById('ab0'),fc=document.getElementById('ac0');
+  if(fb){fb.classList.add('open');fc.classList.add('open');}
+}
+function togAW(b,c){document.getElementById(b).classList.toggle('open');document.getElementById(c).classList.toggle('open');}
+
+// ─── VIEWS ────────────────────────────────────────────────────
+function showToday(){
+  view='today';weekF='all';
+  document.querySelectorAll('#wkFilters .chip').forEach(c=>c.classList.remove('active'));
+  document.querySelector('#wkFilters .chip').classList.add('active');
+  document.getElementById('sectorView').style.display='none';
+  document.getElementById('todayView').style.display='block';
+  document.getElementById('archiveView').style.display='none';
+  document.getElementById('pgTitle').textContent="This Week's Brief";
+  document.getElementById('pgDot').style.background='#fbbf24';
+  buildNav();buildToday();
+}
+function showSector(){
+  view='sector';
+  document.getElementById('sectorView').style.display='flex';
+  document.getElementById('todayView').style.display='none';
+  document.getElementById('archiveView').style.display='none';
+  buildNav();buildSector();
+  document.querySelectorAll('.chip[data-f]').forEach(c=>c.classList.toggle('active',c.dataset.f===activeF));
+}
+function showArchive(){
+  view='archive';archiveF='all';
+  document.querySelectorAll('#awFilters .chip').forEach((c,i)=>c.classList.toggle('active',i===0));
+  document.getElementById('sectorView').style.display='none';
+  document.getElementById('todayView').style.display='none';
+  document.getElementById('archiveView').style.display='flex';
+  document.getElementById('pgTitle').textContent='Past Weeks Archive';
+  document.getElementById('pgDot').style.background='#94a3b8';
+  buildNav();buildArchive();
+}
+function render(){
+  if(view==='today')        {buildNav();buildToday();}
+  else if(view==='archive') {buildNav();buildArchive();}
+  else                      {buildNav();buildSector();}
+}
+
+init();
+</script>
+
+
+</body></html>
