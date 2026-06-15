@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sector Intelligence Tracker</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=DM+Mono:ital,wght@0,300;0,400;1,300&amp;family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&amp;display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f4f6fa;--surface:#fff;--surface2:#f0f3f8;
@@ -203,98 +201,201 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
   <div class="logo" onclick="logoClick()" title="Triple-click to enter admin mode">
     <div class="logo-mark">Market Intel</div>
     <div class="logo-title">Sector<br><span>Tracker</span></div>
-    <div class="admin-pill" id="adminPill">⚙ Admin — click to exit</div>
+    <div class="admin-pill on" id="adminPill">⚙ Admin — click to exit</div>
   </div>
   <div class="nav-special">
-    <div class="nav-item" id="navToday"   onclick="showToday()">
+    <div class="nav-item" id="navToday" onclick="showToday()">
       <span style="font-size:14px">📅</span> This Week's Brief
-      <span class="nav-count" id="cntToday">0</span>
+      <span class="nav-count" id="cntToday">1</span>
     </div>
     <div class="nav-item" id="navArchive" onclick="showArchive()">
       <span style="font-size:14px">🗂</span> Past Weeks
-      <span class="nav-count" id="cntArchive">0</span>
+      <span class="nav-count" id="cntArchive">4</span>
     </div>
   </div>
   <div class="nav-section">Sectors</div>
-  <div id="navList"></div>
+  <div id="navList"><div class="nav-item active" style="--sc: #16a34a;"><span class="nav-dot"></span>Fundraise &amp; IPO<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #e11d48;"><span class="nav-dot"></span>Promoter Selling<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #2563eb;"><span class="nav-dot"></span>Banking &amp; Finance<span class="nav-count">2</span></div><div class="nav-item" style="--sc: #7c3aed;"><span class="nav-dot"></span>Information Technology<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #d97706;"><span class="nav-dot"></span>Energy &amp; Oil<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #059669;"><span class="nav-dot"></span>Pharmaceuticals<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #84cc16;"><span class="nav-dot"></span>Agriculture<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #db2777;"><span class="nav-dot"></span>FMCG &amp; Consumer<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #ea580c;"><span class="nav-dot"></span>Auto &amp; Auto Ancillary<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #475569;"><span class="nav-dot"></span>Metals &amp; Mining<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #dc2626;"><span class="nav-dot"></span>Infrastructure &amp; Real Estate<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0d9488;"><span class="nav-dot"></span>Telecom &amp; Media<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #4f46e5;"><span class="nav-dot"></span>Defence &amp; Aerospace<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0891b2;"><span class="nav-dot"></span>Chemicals<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #65a30d;"><span class="nav-dot"></span>Retail<span class="nav-count">0</span></div></div>
 </aside>
 
 <!-- ══════════ MAIN ══════════ -->
 <main class="main">
 
   <!-- Publish banner -->
-  <div class="pub-bar" id="pubBar">
+  <div class="pub-bar show" id="pubBar">
     <div class="pub-txt">
       <strong>⚠ You have unsaved changes.</strong><br>
       Click "Save &amp; Export HTML" → upload the downloaded file to GitHub → everyone sees your updates in ~30 seconds.
     </div>
     <button class="btn btn-green" onclick="exportHTML()">⬇ Save &amp; Export HTML</button>
-    <button class="btn"           onclick="openGuide()">📋 How to upload</button>
+    <button class="btn" onclick="openGuide()">📋 How to upload</button>
   </div>
 
   <!-- Topbar -->
   <div class="topbar">
     <div class="pg-title">
-      <div class="pg-dot" id="pgDot" style="background:var(--accent)"></div>
-      <span id="pgTitle">Loading…</span>
+      <div class="pg-dot" id="pgDot" style="background: rgb(22, 163, 74);"></div>
+      <span id="pgTitle">Fundraise &amp; IPO</span>
     </div>
     <div class="topbar-right">
       <div class="search-box">
         <span style="color:var(--muted2);font-size:13px">⌕</span>
         <input type="text" id="searchInput" placeholder="Search entries…">
       </div>
-      <div class="lu-badge" id="luBadge">
-        <span class="lu-dot"></span><span id="luText"></span>
+      <div class="lu-badge show" id="luBadge">
+        <span class="lu-dot"></span><span id="luText">Updated 19 May 2025 · 09:00 am</span>
       </div>
-      <button class="btn btn-primary" id="addBtn" style="display:none" onclick="openAdd()">＋ Add Entry</button>
+      <button class="btn btn-primary" id="addBtn" style="display: inline-flex;" onclick="openAdd()">＋ Add Entry</button>
     </div>
   </div>
 
   <!-- Sector view -->
-  <div id="sectorView" style="display:none;flex-direction:column;flex:1;">
-    <div class="stats-row" id="statsRow"></div>
+  <div id="sectorView" style="display: flex; flex-direction: column; flex: 1 1 0%;">
+    <div class="stats-row" id="statsRow">
+    <div class="stat-card">
+      <div class="stat-icon" style="background:#eff6ff">📋</div>
+      <div><div class="stat-label">Total Entries</div>
+      <div class="stat-val">1<span>items</span></div></div>
+    </div></div>
     <div class="filters">
       <span class="filter-lbl">Filter:</span>
-      <span class="chip active" data-f="all"         onclick="setF('all')">All</span>
-      <span class="chip"        data-f="Latest News"  onclick="setF('Latest News')">News</span>
-      <span class="chip cma"   data-f="M&amp;A"       onclick="setF('M&A')">M&amp;A</span>
-      <span class="chip cres"  data-f="Results"       onclick="setF('Results')">Results</span>
-      <span class="chip ctr"   data-f="Trade Deal"    onclick="setF('Trade Deal')">Trade Deal</span>
-      <span class="chip cpol"  data-f="Policy"        onclick="setF('Policy')">Policy</span>
+      <span class="chip active" data-f="all" onclick="setF('all')">All</span>
+      <span class="chip" data-f="Latest News" onclick="setF('Latest News')">News</span>
+      <span class="chip cma" data-f="M&amp;A" onclick="setF('M&amp;A')">M&amp;A</span>
+      <span class="chip cres" data-f="Results" onclick="setF('Results')">Results</span>
+      <span class="chip ctr" data-f="Trade Deal" onclick="setF('Trade Deal')">Trade Deal</span>
+      <span class="chip cpol" data-f="Policy" onclick="setF('Policy')">Policy</span>
     </div>
-    <div class="entries-wrap"><div class="entries" id="entries"></div></div>
+    <div class="entries-wrap"><div class="entries" id="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1781502169193,'fundraise')">
+      <div class="ecard-bar" style="background:#16a34a"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#16a34a;--cr:22,163,74">Fundraise</span>
+          <span class="ecard-date">2026-06-15</span>
+        </div>
+        <div class="ecard-company">XYZ Ltd</div>
+        <div class="ecard-headline">XYZ Ltd raised 250m from ABC Ltd</div>
+        <div class="ecard-details">Refer to link for details</div>
+        <div class="ecard-source">📰 VC Circle · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1781502169193,'fundraise')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1781502169193,'fundraise')">✕ Delete</button>
+  </div></div></div></div>
   </div>
 
   <!-- Today view -->
-  <div id="todayView" style="display:none;flex:1;overflow-y:auto;">
+  <div id="todayView" style="display: none; flex: 1 1 0%; overflow-y: auto;">
     <div class="filters" id="wkFilters">
       <span class="filter-lbl">Filter:</span>
       <span class="chip active" onclick="setWF('all',this)">All</span>
-      <span class="chip"        onclick="setWF('Latest News',this)">News</span>
-      <span class="chip cma"   onclick="setWF('M&A',this)">M&amp;A</span>
-      <span class="chip cres"  onclick="setWF('Results',this)">Results</span>
-      <span class="chip ctr"   onclick="setWF('Trade Deal',this)">Trade Deal</span>
-      <span class="chip cpol"  onclick="setWF('Policy',this)">Policy</span>
+      <span class="chip" onclick="setWF('Latest News',this)">News</span>
+      <span class="chip cma" onclick="setWF('M&amp;A',this)">M&amp;A</span>
+      <span class="chip cres" onclick="setWF('Results',this)">Results</span>
+      <span class="chip ctr" onclick="setWF('Trade Deal',this)">Trade Deal</span>
+      <span class="chip cpol" onclick="setWF('Policy',this)">Policy</span>
     </div>
     <div class="tw-wrap">
       <div class="tw-title">📅 This Week's Brief</div>
-      <div class="tw-sub" id="wkRange"></div>
-      <div id="todayContent"></div>
+      <div class="tw-sub" id="wkRange">Week of 15 Jun 2026 — 21 Jun 2026</div>
+      <div id="todayContent"><div class="tw-empty">
+      <div style="font-size:32px;opacity:.22;margin-bottom:12px">📅</div>
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Nothing logged this week yet</div>
+      <div>Check back soon.</div></div></div>
     </div>
   </div>
 
   <!-- Archive view -->
-  <div id="archiveView" style="display:none;flex:1;flex-direction:column;">
+  <div id="archiveView" style="display: none; flex: 1 1 0%; flex-direction: column;">
     <div class="filters" id="awFilters" style="background:var(--surface);border-bottom:1px solid var(--border);padding:10px 28px;flex-wrap:wrap;">
       <span class="filter-lbl">Filter:</span>
       <span class="chip active" onclick="setAF('all',this)">All</span>
-      <span class="chip"        onclick="setAF('Latest News',this)">News</span>
-      <span class="chip cma"   onclick="setAF('M&A',this)">M&amp;A</span>
-      <span class="chip cres"  onclick="setAF('Results',this)">Results</span>
-      <span class="chip ctr"   onclick="setAF('Trade Deal',this)">Trade Deal</span>
-      <span class="chip cpol"  onclick="setAF('Policy',this)">Policy</span>
+      <span class="chip" onclick="setAF('Latest News',this)">News</span>
+      <span class="chip cma" onclick="setAF('M&amp;A',this)">M&amp;A</span>
+      <span class="chip cres" onclick="setAF('Results',this)">Results</span>
+      <span class="chip ctr" onclick="setAF('Trade Deal',this)">Trade Deal</span>
+      <span class="chip cpol" onclick="setAF('Policy',this)">Policy</span>
     </div>
-    <div style="flex:1;overflow-y:auto;"><div class="tw-wrap"><div id="archiveContent"></div></div></div>
+    <div style="flex:1;overflow-y:auto;"><div class="tw-wrap"><div id="archiveContent"><div class="aw-block">
+      <div class="aw-head" onclick="togAW('ab0','ac0')">
+        <div class="aw-title">🗓 Week of 18 May 2025 — 24 May 2025</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="aw-cnt">4 entries</span>
+          <span class="aw-chev open" id="ac0">▼</span>
+        </div>
+      </div>
+      <div class="aw-body open" id="ab0"><div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:#2563eb"></span>Banking &amp; Finance
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(2)</span></div>
+        <div class="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(2,'bank')">
+      <div class="ecard-bar" style="background:#d97706"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#d97706;--cr:217,119,6">Policy</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">RBI</div>
+        <div class="ecard-headline">RBI holds repo rate at 6.25%; shifts stance to accommodative</div>
+        <div class="ecard-details">MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August poli…</div>
+        <div class="ecard-source">📰 RBI Press Release</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(2,'bank')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(2,'bank')">✕ Delete</button>
+  </div></div><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1,'bank')">
+      <div class="ecard-bar" style="background:#059669"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#059669;--cr:5,150,105">Results</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">HDFC Bank</div>
+        <div class="ecard-headline">HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr</div>
+        <div class="ecard-details">Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.</div>
+        <div class="ecard-source">📰 BSE Filing</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1,'bank')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1,'bank')">✕ Delete</button>
+  </div></div></div><div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:#7c3aed"></span>Information Technology
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(1)</span></div>
+        <div class="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(3,'it')">
+      <div class="ecard-bar" style="background:#7c3aed"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#7c3aed;--cr:124,58,237">M&amp;A</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">Infosys</div>
+        <div class="ecard-headline">Infosys acquires US-based AI firm IntelliSense for $320mn</div>
+        <div class="ecard-details">Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.</div>
+        <div class="ecard-source">📰 Bloomberg · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(3,'it')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(3,'it')">✕ Delete</button>
+  </div></div></div><div class="aw-sec-lbl"><span class="aw-sec-dot" style="background:#059669"></span>Pharmaceuticals
+        <span style="font-family:'DM Mono',monospace;font-size:10px;margin-left:4px">(1)</span></div>
+        <div class="entries"><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(4,'pharma')">
+      <div class="ecard-bar" style="background:#2563eb"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#2563eb;--cr:37,99,235">Latest News</span>
+          <span class="ecard-date">2025-05-19</span>
+        </div>
+        <div class="ecard-company">Sun Pharma</div>
+        <div class="ecard-headline">USFDA issues EIR for Halol plant — resolution after 4 years</div>
+        <div class="ecard-details">Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US gen…</div>
+        <div class="ecard-source">📰 ET Markets</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(4,'pharma')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(4,'pharma')">✕ Delete</button>
+  </div></div></div></div>
+    </div></div></div></div>
   </div>
 
 </main>
@@ -304,9 +405,9 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
 <div class="overlay" id="detOverlay" onclick="closeDtlBg(event)">
   <div class="det-box">
     <div class="det-head">
-      <div class="det-meta"  id="dtlMeta"></div>
+      <div class="det-meta" id="dtlMeta"></div>
       <div class="det-title" id="dtlTitle"></div>
-      <div class="det-co"    id="dtlCo"></div>
+      <div class="det-co" id="dtlCo"></div>
     </div>
     <div class="det-body" id="dtlBody"></div>
     <div class="det-foot" id="dtlFoot"></div>
@@ -316,15 +417,15 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
 <!-- ══════════ ADD / EDIT FORM ══════════ -->
 <div class="modal-wrap" id="formWrap" onclick="closeFormBg(event)">
   <div class="modal">
-    <div class="modal-title" id="formTitle">Add Entry</div>
+    <div class="modal-title" id="formTitle">＋ Add Entry</div>
     <div class="fg">
-      <div><label class="fl">Date</label><input  class="fi" type="date" id="fDate"></div>
-      <div><label class="fl">Sector</label><select class="fs" id="fSector"></select></div>
-      <div><label class="fl">Company / Entity</label><input class="fi" type="text" id="fCo"   placeholder="e.g. HDFC Bank"></div>
+      <div><label class="fl">Date</label><input class="fi" type="date" id="fDate"></div>
+      <div><label class="fl">Sector</label><select class="fs" id="fSector"><option value="fundraise">Fundraise &amp; IPO</option><option value="promoter">Promoter Selling</option><option value="bank">Banking &amp; Finance</option><option value="it">Information Technology</option><option value="energy">Energy &amp; Oil</option><option value="pharma">Pharmaceuticals</option><option value="agri">Agriculture</option><option value="fmcg">FMCG &amp; Consumer</option><option value="auto">Auto &amp; Auto Ancillary</option><option value="metal">Metals &amp; Mining</option><option value="infra">Infrastructure &amp; Real Estate</option><option value="telecom">Telecom &amp; Media</option><option value="defence">Defence &amp; Aerospace</option><option value="chemicals">Chemicals</option><option value="retail">Retail</option></select></div>
+      <div><label class="fl">Company / Entity</label><input class="fi" type="text" id="fCo" placeholder="e.g. HDFC Bank"></div>
       <div>
         <label class="fl">Category</label>
         <select class="fs" id="fCat">
-          <option>Latest News</option><option>M&A</option><option>Results</option>
+          <option>Latest News</option><option>M&amp;A</option><option>Results</option>
           <option>Trade Deal</option><option>Policy</option><option>Management Change</option>
           <option>Fundraise</option><option>IPO</option><option>Promoter Selling</option>
           <option>Analyst Rating</option><option>Macro / Global</option><option>Other</option>
@@ -332,13 +433,13 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
       </div>
       <div class="ff"><label class="fl">Headline <span style="color:#dc2626">*</span></label><input class="fi" type="text" id="fHead" placeholder="One-line summary of the news"></div>
       <div class="ff"><label class="fl">Details</label><textarea class="fta" id="fDet" placeholder="Full context, numbers, key implications…"></textarea></div>
-      <div><label class="fl">Source</label><input class="fi" type="text" id="fSrc"  placeholder="ET, Bloomberg, BSE Filing…"></div>
+      <div><label class="fl">Source</label><input class="fi" type="text" id="fSrc" placeholder="ET, Bloomberg, BSE Filing…"></div>
       <div><label class="fl">Source Link (optional)</label><input class="fi" type="url" id="fLink" placeholder="https://…"></div>
       <div><label class="fl">Market Cap (₹ Cr)</label><input class="fi" type="text" id="fMcap" placeholder="e.g. 45,000"></div>
       <div><label class="fl">City</label><input class="fi" type="text" id="fCity" placeholder="e.g. Mumbai"></div>
     </div>
     <div class="modal-actions">
-      <button class="btn"         onclick="closeForm()">Cancel</button>
+      <button class="btn" onclick="closeForm()">Cancel</button>
       <button class="btn btn-primary" id="saveBtn" onclick="saveEntry()">Save Entry</button>
     </div>
   </div>
@@ -353,7 +454,7 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
     <input class="pw-inp" type="password" id="pwInp" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPw()">
     <div class="pw-err" id="pwErr"></div>
     <div class="pw-actions">
-      <button class="btn"         onclick="closePw()">Cancel</button>
+      <button class="btn" onclick="closePw()">Cancel</button>
       <button class="btn btn-primary" onclick="checkPw()">Unlock →</button>
     </div>
   </div>
@@ -393,8 +494,8 @@ const ADMIN_PW = 'tracker2025';
 //  ALL TRACKER DATA LIVES HERE — DO NOT EDIT BELOW THIS LINE
 //  (entries are managed through the admin panel)
 // ═══════════════════════════════════════════════════════════════
-const TRACKER_META = {"lastUpdated":"2025-05-19T09:00:00+05:30","updatedBy":"Admin"};
-const TRACKER_DATA = {"fundraise":[],"promoter":[],"bank":[{"id":1,"date":"2025-05-19","company":"HDFC Bank","cat":"Results","headline":"HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr","details":"Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.","source":"BSE Filing","link":"","marketCap":"","city":"Mumbai"},{"id":2,"date":"2025-05-19","company":"RBI","cat":"Policy","headline":"RBI holds repo rate at 6.25%; shifts stance to accommodative","details":"MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August policy.","source":"RBI Press Release","link":"","marketCap":"","city":"Mumbai"}],"it":[{"id":3,"date":"2025-05-19","company":"Infosys","cat":"M&A","headline":"Infosys acquires US-based AI firm IntelliSense for $320mn","details":"Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.","source":"Bloomberg","link":"https://bloomberg.com","marketCap":"","city":"Bengaluru"}],"energy":[],"pharma":[{"id":4,"date":"2025-05-19","company":"Sun Pharma","cat":"Latest News","headline":"USFDA issues EIR for Halol plant — resolution after 4 years","details":"Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US generics revenue.","source":"ET Markets","link":"","marketCap":"","city":"Mumbai"}],"agri":[],"fmcg":[],"auto":[],"metal":[],"infra":[],"telecom":[],"defence":[],"chemicals":[],"retail":[]};
+const TRACKER_META = {"lastUpdated":"2026-06-15T11:13:00+05:30","updatedBy":"Admin"};
+const TRACKER_DATA = {"fundraise":[{"id":1781502169193,"date":"2026-06-15","company":"XYZ Ltd","cat":"Fundraise","headline":"XYZ Ltd raised 250m from ABC Ltd","details":"Refer to link for details","source":"VC Circle","link":"https://www.vccircle.com/aicall-assistant-startup-equal-raises-series-b-funding","marketCap":"9000","city":"Mumbai"}],"promoter":[],"bank":[{"id":1,"date":"2025-05-19","company":"HDFC Bank","cat":"Results","headline":"HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr","details":"Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.","source":"BSE Filing","link":"","marketCap":"","city":"Mumbai"},{"id":2,"date":"2025-05-19","company":"RBI","cat":"Policy","headline":"RBI holds repo rate at 6.25%; shifts stance to accommodative","details":"MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August policy.","source":"RBI Press Release","link":"","marketCap":"","city":"Mumbai"}],"it":[{"id":3,"date":"2025-05-19","company":"Infosys","cat":"M&A","headline":"Infosys acquires US-based AI firm IntelliSense for $320mn","details":"Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.","source":"Bloomberg","link":"https://bloomberg.com","marketCap":"","city":"Bengaluru"}],"energy":[],"pharma":[{"id":4,"date":"2025-05-19","company":"Sun Pharma","cat":"Latest News","headline":"USFDA issues EIR for Halol plant — resolution after 4 years","details":"Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US generics revenue.","source":"ET Markets","link":"","marketCap":"","city":"Mumbai"}],"agri":[],"fmcg":[],"auto":[],"metal":[],"infra":[],"telecom":[],"defence":[],"chemicals":[],"retail":[]};
 // ═══════════════════════════════════════════════════════════════
 
 const TODAY = new Date().toISOString().split('T')[0];
@@ -846,5 +947,6 @@ function render(){
 
 init();
 </script>
-</body>
-</html>
+
+
+</body></html>
