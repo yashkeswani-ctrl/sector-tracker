@@ -204,9 +204,9 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
     <div class="admin-pill" id="adminPill">⚙ Admin — click to exit</div>
   </div>
   <div class="nav-special">
-    <div class="nav-item" id="navToday" onclick="showToday()">
+    <div class="nav-item active" id="navToday" onclick="showToday()">
       <span style="font-size:14px">📅</span> This Week's Brief
-      <span class="nav-count" id="cntToday">2</span>
+      <span class="nav-count" id="cntToday">3</span>
     </div>
     <div class="nav-item" id="navArchive" onclick="showArchive()">
       <span style="font-size:14px">🗂</span> Past Weeks
@@ -214,7 +214,7 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
     </div>
   </div>
   <div class="nav-section">Sectors</div>
-  <div id="navList"><div class="nav-item active" style="--sc: #16a34a;"><span class="nav-dot"></span>Fundraise &amp; IPO<span class="nav-count">2</span></div><div class="nav-item" style="--sc: #e11d48;"><span class="nav-dot"></span>Promoter Selling<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #2563eb;"><span class="nav-dot"></span>Banking &amp; Finance<span class="nav-count">2</span></div><div class="nav-item" style="--sc: #7c3aed;"><span class="nav-dot"></span>Information Technology<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #d97706;"><span class="nav-dot"></span>Energy &amp; Oil<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #059669;"><span class="nav-dot"></span>Pharmaceuticals<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #84cc16;"><span class="nav-dot"></span>Agriculture<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #db2777;"><span class="nav-dot"></span>FMCG &amp; Consumer<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #ea580c;"><span class="nav-dot"></span>Auto &amp; Auto Ancillary<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #475569;"><span class="nav-dot"></span>Metals &amp; Mining<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #dc2626;"><span class="nav-dot"></span>Infrastructure &amp; Real Estate<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0d9488;"><span class="nav-dot"></span>Telecom &amp; Media<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #4f46e5;"><span class="nav-dot"></span>Defence &amp; Aerospace<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0891b2;"><span class="nav-dot"></span>Chemicals<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #65a30d;"><span class="nav-dot"></span>Retail<span class="nav-count">0</span></div></div>
+  <div id="navList"><div class="nav-item" style="--sc: #16a34a;"><span class="nav-dot"></span>Fundraise &amp; IPO<span class="nav-count">2</span></div><div class="nav-item" style="--sc: #e11d48;"><span class="nav-dot"></span>Promoter Selling<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #2563eb;"><span class="nav-dot"></span>Banking &amp; Finance<span class="nav-count">2</span></div><div class="nav-item" style="--sc: #7c3aed;"><span class="nav-dot"></span>Information Technology<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #d97706;"><span class="nav-dot"></span>Energy &amp; Oil<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #059669;"><span class="nav-dot"></span>Pharmaceuticals<span class="nav-count">1</span></div><div class="nav-item" style="--sc: #84cc16;"><span class="nav-dot"></span>Agriculture<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #db2777;"><span class="nav-dot"></span>FMCG &amp; Consumer<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #ea580c;"><span class="nav-dot"></span>Auto &amp; Auto Ancillary<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #475569;"><span class="nav-dot"></span>Metals &amp; Mining<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #dc2626;"><span class="nav-dot"></span>Infrastructure &amp; Real Estate<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0d9488;"><span class="nav-dot"></span>Telecom &amp; Media<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #4f46e5;"><span class="nav-dot"></span>Defence &amp; Aerospace<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #0891b2;"><span class="nav-dot"></span>Chemicals<span class="nav-count">0</span></div><div class="nav-item" style="--sc: #65a30d;"><span class="nav-dot"></span>Retail<span class="nav-count">0</span></div></div>
 </aside>
 
 <!-- ══════════ MAIN ══════════ -->
@@ -233,8 +233,8 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
   <!-- Topbar -->
   <div class="topbar">
     <div class="pg-title">
-      <div class="pg-dot" id="pgDot" style="background: rgb(22, 163, 74);"></div>
-      <span id="pgTitle">Fundraise &amp; IPO</span>
+      <div class="pg-dot" id="pgDot" style="background: rgb(251, 191, 36);"></div>
+      <span id="pgTitle">This Week's Brief</span>
     </div>
     <div class="topbar-right">
       <div class="search-box">
@@ -242,14 +242,14 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
         <input type="text" id="searchInput" placeholder="Search entries…">
       </div>
       <div class="lu-badge show" id="luBadge">
-        <span class="lu-dot"></span><span id="luText">Updated 19 May 2025 · 09:00 am</span>
+        <span class="lu-dot"></span><span id="luText">Updated 15 Jun 2026 · 04:15 pm</span>
       </div>
       <button class="btn btn-primary" id="addBtn" style="display: none;" onclick="openAdd()">＋ Add Entry</button>
     </div>
   </div>
 
   <!-- Sector view -->
-  <div id="sectorView" style="display: flex; flex-direction: column; flex: 1 1 0%;">
+  <div id="sectorView" style="display: none; flex-direction: column; flex: 1 1 0%;">
     <div class="stats-row" id="statsRow">
     <div class="stat-card">
       <div class="stat-icon" style="background:#eff6ff">📋</div>
@@ -301,7 +301,7 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
   </div>
 
   <!-- Today view -->
-  <div id="todayView" style="display: none; flex: 1 1 0%; overflow-y: auto;">
+  <div id="todayView" style="display: block; flex: 1 1 0%; overflow-y: auto;">
     <div class="filters" id="wkFilters">
       <span class="filter-lbl">Filter:</span>
       <span class="chip active" onclick="setWF('all',this)">All</span>
@@ -314,10 +314,59 @@ code{background:#e2e8f0;padding:1px 6px;border-radius:4px;font-family:'DM Mono',
     <div class="tw-wrap">
       <div class="tw-title">📅 This Week's Brief</div>
       <div class="tw-sub" id="wkRange">Week of 15 Jun 2026 — 21 Jun 2026</div>
-      <div id="todayContent"><div class="tw-empty">
-      <div style="font-size:32px;opacity:.22;margin-bottom:12px">📅</div>
-      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:4px">Nothing logged this week yet</div>
-      <div>Check back soon.</div></div></div>
+      <div id="todayContent"><div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;">Thursday, 18 Jun 2026</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div></div><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1781757963946,'promoter')">
+      <div class="ecard-bar" style="background:#2563eb"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#2563eb;--cr:37,99,235">Latest News</span>
+          <span class="ecard-date">2026-06-18</span>
+        </div>
+        
+        <div class="ecard-headline">xxxxxxxxxxxxxxxxxxxxx</div>
+        <div class="ecard-details">xxxxxxxxxxxxxxxxxxxxxx</div>
+        <div class="ecard-source">📰 xxxxxxxxxx · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1781757963946,'promoter')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1781757963946,'promoter')">✕ Delete</button>
+  </div></div><div style="display:flex;align-items:center;gap:10px;margin:18px 0 10px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;white-space:nowrap;">Monday, 15 Jun 2026</div>
+        <div style="flex:1;height:1px;background:var(--border);"></div></div><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1781520343940,'fundraise')">
+      <div class="ecard-bar" style="background:#16a34a"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#16a34a;--cr:22,163,74">Fundraise</span>
+          <span class="ecard-date">2026-06-15</span>
+        </div>
+        <div class="ecard-company">4baseCare</div>
+        <div class="ecard-headline">4baseCare extends Series B round with a cheque from GrowX</div>
+        <div class="ecard-details">Precision oncology startup 4baseCare has secured an additional Rs 38 crore as part of an extended Series B round which includes participatio…</div>
+        <div class="ecard-source">📰 VC Circle · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1781520343940,'fundraise')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1781520343940,'fundraise')">✕ Delete</button>
+  </div></div><div class="ecard">
+    <div class="ecard-main" onclick="openDetail(1781520191612,'fundraise')">
+      <div class="ecard-bar" style="background:#16a34a"></div>
+      <div class="ecard-body">
+        <div class="ecard-top">
+          <span class="tag cat" style="--cc:#16a34a;--cr:22,163,74">Fundraise</span>
+          <span class="ecard-date">2026-06-15</span>
+        </div>
+        <div class="ecard-company">Ethereal Machines</div>
+        <div class="ecard-headline">Avataar Ventures leads Series B Funding in Ethereal Machines</div>
+        <div class="ecard-details">Ethereal Machines has secured Rs 272 crore in its Series B funding round led by growth stage venture capital firm Avataar Ventures.</div>
+        <div class="ecard-source">📰 VC Circle · 🔗 Link</div>
+      </div>
+    </div><div class="ecard-footer">
+    <button class="btn btn-sm btn-edit" onclick="event.stopPropagation();openEdit(1781520191612,'fundraise')">✏ Edit</button>
+    <button class="btn btn-sm btn-del" onclick="event.stopPropagation();delEntry(1781520191612,'fundraise')">✕ Delete</button>
+  </div></div></div>
     </div>
   </div>
 
@@ -498,8 +547,8 @@ const ADMIN_PW = 'tracker2025';
 //  ALL TRACKER DATA LIVES HERE — DO NOT EDIT BELOW THIS LINE
 //  (entries are managed through the admin panel)
 // ═══════════════════════════════════════════════════════════════
-const TRACKER_META = {"lastUpdated":"2026-06-15T16:15:00+05:30","updatedBy":"Admin"};
-const TRACKER_DATA = {"fundraise":[{"id":1781520191612,"date":"2026-06-15","company":"Ethereal Machines","cat":"Fundraise","headline":"Avataar Ventures leads Series B Funding in Ethereal Machines","details":"Ethereal Machines has secured Rs 272 crore in its Series B funding round led by growth stage venture capital firm Avataar Ventures.","source":"VC Circle","link":"https://www.vccircle.com/avataarventures-leads-series-b-funding-in-ethereal-machines","marketCap":"","city":"Bangalore"},{"id":1781520343940,"date":"2026-06-15","company":"4baseCare","cat":"Fundraise","headline":"4baseCare extends Series B round with a cheque from GrowX","details":"Precision oncology startup 4baseCare has secured an additional Rs 38 crore as part of an extended Series B round which includes participation from new and existing investors. Veteran investors include Ashish Kacholia and Lashit Sanghvi, existing investors included Yali Capital. \nThe company's extended round was led by GrowX Capital bringing total Series B raise to Rs 128 crore.","source":"VC Circle","link":"https://www.vccircle.com/yalicapital-backed-4basecare-extends-series-b-round-with-a-cheque-from-growx","marketCap":"","city":"Bangalore"}],"promoter":[],"bank":[{"id":1,"date":"2025-05-19","company":"HDFC Bank","cat":"Results","headline":"HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr","details":"Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.","source":"BSE Filing","link":"","marketCap":"","city":"Mumbai"},{"id":2,"date":"2025-05-19","company":"RBI","cat":"Policy","headline":"RBI holds repo rate at 6.25%; shifts stance to accommodative","details":"MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August policy.","source":"RBI Press Release","link":"","marketCap":"","city":"Mumbai"}],"it":[{"id":3,"date":"2025-05-19","company":"Infosys","cat":"M&A","headline":"Infosys acquires US-based AI firm IntelliSense for $320mn","details":"Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.","source":"Bloomberg","link":"https://bloomberg.com","marketCap":"","city":"Bengaluru"}],"energy":[],"pharma":[{"id":4,"date":"2025-05-19","company":"Sun Pharma","cat":"Latest News","headline":"USFDA issues EIR for Halol plant — resolution after 4 years","details":"Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US generics revenue.","source":"ET Markets","link":"","marketCap":"","city":"Mumbai"}],"agri":[],"fmcg":[],"auto":[],"metal":[],"infra":[],"telecom":[],"defence":[],"chemicals":[],"retail":[]};
+const TRACKER_META = {"lastUpdated":"2026-06-18T10:16:00+05:30","updatedBy":"Admin"};
+const TRACKER_DATA = {"fundraise":[{"id":1781520191612,"date":"2026-06-15","company":"Ethereal Machines","cat":"Fundraise","headline":"Avataar Ventures leads Series B Funding in Ethereal Machines","details":"Ethereal Machines has secured Rs 272 crore in its Series B funding round led by growth stage venture capital firm Avataar Ventures.","source":"VC Circle","link":"https://www.vccircle.com/avataarventures-leads-series-b-funding-in-ethereal-machines","marketCap":"","city":"Bangalore"},{"id":1781520343940,"date":"2026-06-15","company":"4baseCare","cat":"Fundraise","headline":"4baseCare extends Series B round with a cheque from GrowX","details":"Precision oncology startup 4baseCare has secured an additional Rs 38 crore as part of an extended Series B round which includes participation from new and existing investors. Veteran investors include Ashish Kacholia and Lashit Sanghvi, existing investors included Yali Capital. \nThe company's extended round was led by GrowX Capital bringing total Series B raise to Rs 128 crore.","source":"VC Circle","link":"https://www.vccircle.com/yalicapital-backed-4basecare-extends-series-b-round-with-a-cheque-from-growx","marketCap":"","city":"Bangalore"}],"promoter":[{"id":1781757963946,"date":"2026-06-18","company":"","cat":"Latest News","headline":"xxxxxxxxxxxxxxxxxxxxx","details":"xxxxxxxxxxxxxxxxxxxxxx","source":"xxxxxxxxxx","link":"https://www.moneycontrol.com/news/business/markets/from-rs-2-crore-to-rs-5-000-crore-nse-ipo-set-to-deliver-windfall-for-sbi-and-early-backers-13952429.html","marketCap":"xxxxxxxxxxxxxxx","city":"xxxxxxxxxxxx"}],"bank":[{"id":1,"date":"2025-05-19","company":"HDFC Bank","cat":"Results","headline":"HDFC Bank Q4 PAT up 37% YoY at ₹16,512 cr","details":"Net interest income grew 29% YoY. Asset quality improved with GNPA at 1.24%. Management guided for credit growth of 15-17% for FY26.","source":"BSE Filing","link":"","marketCap":"","city":"Mumbai"},{"id":2,"date":"2025-05-19","company":"RBI","cat":"Policy","headline":"RBI holds repo rate at 6.25%; shifts stance to accommodative","details":"MPC voted 4-2 to hold rates. Governor flagged disinflation progress. Market reading this as a pivot signal; rate cut possible in August policy.","source":"RBI Press Release","link":"","marketCap":"","city":"Mumbai"}],"it":[{"id":3,"date":"2025-05-19","company":"Infosys","cat":"M&A","headline":"Infosys acquires US-based AI firm IntelliSense for $320mn","details":"Deal bolsters Infosys AI practice. IntelliSense brings 400 engineers and proprietary LLM fine-tuning IP. EPS dilutive in near term.","source":"Bloomberg","link":"https://bloomberg.com","marketCap":"","city":"Bengaluru"}],"energy":[],"pharma":[{"id":4,"date":"2025-05-19","company":"Sun Pharma","cat":"Latest News","headline":"USFDA issues EIR for Halol plant — resolution after 4 years","details":"Establishment Inspection Report clears Halol manufacturing facility. Opens path to re-file 23 pending ANDAs. Significant positive for US generics revenue.","source":"ET Markets","link":"","marketCap":"","city":"Mumbai"}],"agri":[],"fmcg":[],"auto":[],"metal":[],"infra":[],"telecom":[],"defence":[],"chemicals":[],"retail":[]};
 // ═══════════════════════════════════════════════════════════════
 
 const TODAY = new Date().toISOString().split('T')[0];
